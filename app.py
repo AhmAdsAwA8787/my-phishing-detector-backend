@@ -17,34 +17,13 @@ def predict_email():
     if not data or "text" not in data:
         return jsonify({"error": "No text provided"}), 400
 
-    text = data["text"].strip()
+    text = data["text"]
 
-    if text == "":
+    if text.strip() == "":
         return jsonify({"error": "Empty text"}), 400
 
-    # 1️⃣ تحليل داخلي بالذكاء الاصطناعي
-    local_result = predict(text)
-
-    # 2️⃣ إرسال الإيميل إلى موقعك الخارجي
-    external_api_url = "https://رهقعسفخفشم/predict"
-
-    try:
-        external_response = requests.post(
-            external_api_url,
-            json={"email_text": text},
-            timeout=10
-        )
-
-        external_report = external_response.json()
-
-    except Exception as e:
-        external_report = {"error": "External site not reachable"}
-
-    # 3️⃣ دمج التقريرين وإرجاعهم
-    return jsonify({
-        "local_ai_result": local_result,
-        "external_site_report": external_report
-    })
+    result = predict(text)
+    return jsonify(result)})
 
 
 if __name__ == "__main__":
